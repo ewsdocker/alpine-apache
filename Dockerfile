@@ -47,9 +47,9 @@ FROM ${FROM_PARENT}:${FROM_VERS}${FROM_EXT}${FROM_EXT_MOD}
 
 # ========================================================================================
 #
-# docker build --file=Dockerfile -t alpine-apache:2.4.43 .
+# docker build --file=Dockerfile -t ewsdocker/alpine-apache:2.4.43 .
 #
-# docker run -dit --name httpd -p 80:80 -v ${HOME}/public_html/:/usr/local/apache2/htdocs/ httpd:2.4.43
+# docker run -dit --name httpd -p 80:80 -v ${HOME}/public_html/:/usr/local/apache2/htdocs/ ewsdocker/alpine-apache:2.4.43
 #
 # ========================================================================================
 
