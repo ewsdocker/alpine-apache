@@ -42,6 +42,7 @@ actual files to be served.
 
     docker run \
       -dit \
+      --restart unless-stopped \      
       --name httpd \
       -p 80:80 \
       -v ${HOME}/public_html/:/usr/local/apache2/htdocs/ \
