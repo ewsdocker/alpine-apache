@@ -1,8 +1,8 @@
 # ========================================================================================
 # ========================================================================================
 #
-#    Dockerfile
-#      Dockerfile for alpine-apache.
+#    build-httpd
+#      Build/Installation file for alpine-apache.
 #
 # ========================================================================================
 #
@@ -11,7 +11,7 @@
 # @copyright © 2020. EarthWalk Software.
 # @license Licensed under the GNU General Public License, GPL-3.0-or-later.
 # @package alpine-apache
-# @subpackage Dockerfile
+# @subpackage build-httpd
 #
 # ========================================================================================
 #
@@ -37,26 +37,50 @@
 # ========================================================================================
 # ========================================================================================
 
-ARG FROM_REPO=""
-ARG FROM_PARENT="httpd"
-ARG FROM_VERS="2.4.43"
-ARG FROM_EXT="-alpine"
-ARG FROM_EXT_MOD=""
+echo
+echo "Stopping and removing httpd"
+echo
 
-FROM ${FROM_PARENT}:${FROM_VERS}${FROM_EXT}${FROM_EXT_MOD}
+docker stop httpd
+docker rm httpd
 
-# ========================================================================================
-#
-# docker build --file=Dockerfile -t alpine-apache:2.4.43 .
-#
-# docker run -dit --name httpd -p 80:80 -v ${HOME}/public_html/:/usr/local/apache2/htdocs/ httpd:2.4.43
-#
-# ========================================================================================
+echo
+echo "Removing alpine-apache:2.4.43"
+echo
 
-ARG FROM_REPO
-ARG FROM_PARENT
-ARG FROM_VERS
-ARG FROM_EXT
-ARG FROM_EXT_MOD
+docker rmi alpine-apache:2.4.43
 
-EXPOSE 80 443
+echo
+echo "Building alpine-apache:2.4.43"
+echo
+
+docker build \
+       --file=Dockerfile \
+       -t alpine-apache:2.4.43 .
+[[ $? -eq 0 ]] ||
+ {
+ 	echo "alpine-apache:2.4.43 failed"
+ 	exit 1
+ }
+
+echo
+echo "Installing and starting httpd from alpine-apache:2.4.43"
+echo
+
+docker run \
+    -d \
+    -it \
+    --name httpd \
+    -v ${HOME}/public_html/:/usr/local/apache2/htdocs/ \
+  alpine-apache:2.4.43
+[[ $? -eq 0 ]] ||
+ {
+ 	echo "Unable to install/run httpd from alpine-apache:2.4.43"
+ 	exit 2
+ }
+ 
+echo
+echo "Successfully installed httpd from alpine-apache:2.4.43"
+echo
+
+exit 0

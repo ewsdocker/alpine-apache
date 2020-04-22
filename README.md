@@ -1,56 +1,52 @@
-## Alpine microcontainer with Apache2
 
-This is a micro docker container ![](https://images.microbadger.com/badges/image/nimmis/alpine-apache.svg) based on Alpine OS and Apache version 2.
-
-There images are build on [nimmis/alpine-micro](https://hub.docker.com/r/nimmis/alpine-micro/) ![](https://images.microbadger.com/badges/image/nimmis/alpine-micro.svg) which are a modified version of Alpine OS with a working init process, cron, logrotate  and syslog. All services are started by runit daemon, for more information about how it works and setup of new services please visit <https://hub.docker.com/r/nimmis/alpine-micro/> for more information.
-
-The container also have a backup system with cron schedule, number of copies to save etc, for information about the backup system please visit the [README.md for the backupsystem](https://github.com/nimmis/backup/blob/master/README.md)
+__Preliminary Documentation__ - 2020-04-21
+____  
+## ewsdocker/alpine-apache
 
 
-#### starting the container as a daemon
+An __Docker Alpine__-based __Apache2__ Server based on the latest release
+of  
+__httpd:2.4.43-alpine__ from 
+[The Apache HTTP Server Project](https://hub.docker.com/_/httpd).  
 
-	docker run -d --name apache nimmis/alpine-apache
+### Availability  
 
-This will start the container with apache process running, to access the container use
+__Source: [GIT Repository}(https://github.com/ewsdocker/alpine-apache)__  
+__Docker Image: [ewsdocker/alpine-apache]()__  
 
-	docker exec -ti apache /bin/sh
+____  
 
-#### Static web folder
+__Getting the source__  
 
-The images exposes a volume at /web. The structure is
+    git clone https://github.com/ewsdocker/alpine-apache  
 
-| Directory | Function |
-| --------- | -------- |
-| /web/html | web root |
-| /web/cgi-bin | cgi bin folder |
-| /web/config | apache config directory |
-| /web/logs | apache log directory |
-| /web/internal | internal pages, error pages etc
+__Getting pre-built image__
 
-To use this start the container with
+    docker pull ewsdocker/alpine-apache:2.4.43  
 
-	docker run -d --name -apache -v /path/to/web:/web nimmis/alpine-apache
+  or  
 
-if the folders are missing they will be created each time the container is started.
+    docker pull ewsdocker/alpine-apache:latest  
 
-#### Accessing apache from outside the container
+__Building and Installing__  
 
-To access the webserver from external you can the **-P/-p** paramter, with **-P** the ports 80 and 443 is automaticly exposed and assign a random port.
+In the following 2 examples, the volume line (-v) must be modified to
+to point to the host directory to point to the actual files to be served.  
 
-or use the **-p** command to assign other ports, the syntax is
+  __Manual Build and Install__  
 
-	-p <external port on host>:<local port in container>
+    docker build --file=Dockerfile -t alpine-apache:2.4.43 .  
 
-so to access the apache server port 80 on port 8080 you should use the command
+    docker run \
+      -dit \
+      --name httpd \
+      -p 80:80 \
+      -v ${HOME}/public_html/:/usr/local/apache2/htdocs/ \
+    alpine-apache:2.4.43  
 
-	docker run -d --name apache -p 8080:80 nimmis/alpine-apache
+  __Build and Install Script__
+  
+  Navigate to the "builds" directory in the alpine-apache source directory
+  and run the script named __build-httpd.sh__ (you may have to make it an
+  executable file).
 
-or assigning 80->80 and 443->443 use
-
-	docker run -d --name apache -p 80:80 -p 443:443 nimmis/alpine-apache
-
-#### Successsful setup
-
-If everything worked and you where able to expose the correct port and type the correct adress in a webbrowser the following page should appear.
-
-![screenshot](https://github.com/nimmis/docker-alpine-apache/blob/master/images/screenshot.png?raw=true "Screenshot")
