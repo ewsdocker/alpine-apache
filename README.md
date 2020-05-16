@@ -41,11 +41,12 @@ actual files to be served.
   __Manual Install (from GIT or Docker)__  
 
     docker run \
-      -dit \
+      -d \
+      -it \
       --restart unless-stopped \      
       --name httpd \
       -p 80:80 \
-      -v ${HOME}/public_html/:/usr/local/apache2/htdocs/ \
+      -v ${HOME}/Development/ewsldc/ldc-framework/docs/:/usr/local/apache2/htdocs/ \
     ewsdocker/alpine-apache:2.4.43  
 
   __Build and Install Script (from GIT clone)__
