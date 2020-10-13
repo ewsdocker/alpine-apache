@@ -7,7 +7,7 @@
 # ========================================================================================
 #
 # @author Jay Wheeler.
-# @version 2.4.43-alpine
+# @version 2.4.46-alpine
 # @copyright © 2020. EarthWalk Software.
 # @license Licensed under the GNU General Public License, GPL-3.0-or-later.
 # @package alpine-apache
@@ -31,15 +31,19 @@
 #   GNU General Public License for more details.
 #
 #   You should have received a copy of the GNU General Public License
-#   along with ewsdocker/httpd:2.4.43-alpine.  If not, see 
+#   along with ewsdocker/httpd:2.4.46-alpine.  If not, see 
 #   <http://www.gnu.org/licenses/>.
 #
 # ========================================================================================
 # ========================================================================================
 
+#
+#	select the httpd:2.4.46-alpine Apache server from the docker library
+#		This will cause a download from docker if the file is not already present.
+#
 ARG FROM_REPO=""
 ARG FROM_PARENT="httpd"
-ARG FROM_VERS="2.4.43"
+ARG FROM_VERS="2.4.46"
 ARG FROM_EXT="-alpine"
 ARG FROM_EXT_MOD=""
 
@@ -47,9 +51,9 @@ FROM ${FROM_PARENT}:${FROM_VERS}${FROM_EXT}${FROM_EXT_MOD}
 
 # ========================================================================================
 #
-# docker build --file=Dockerfile -t ewsdocker/alpine-apache:2.4.43 .
+# docker build --file=Dockerfile -t ewsdocker/alpine-apache:2.4.46 .
 #
-# docker run -dit --name httpd -p 80:80 -v ${HOME}/public_html/:/usr/local/apache2/htdocs/ ewsdocker/alpine-apache:2.4.43
+# docker run -dit --name httpd -p 80:80 --ip 172.17.0.32 -v ${HOME}/public_html/:/usr/local/apache2/htdocs/ ewsdocker/alpine-apache:2.4.46
 #
 # ========================================================================================
 

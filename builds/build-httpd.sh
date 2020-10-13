@@ -1,3 +1,4 @@
+#!/bin/bash
 # ========================================================================================
 # ========================================================================================
 #
@@ -7,7 +8,7 @@
 # ========================================================================================
 #
 # @author Jay Wheeler.
-# @version 2.4.43-alpine
+# @version 2.4.46-alpine
 # @copyright © 2020. EarthWalk Software.
 # @license Licensed under the GNU General Public License, GPL-3.0-or-later.
 # @package alpine-apache
@@ -31,7 +32,7 @@
 #   GNU General Public License for more details.
 #
 #   You should have received a copy of the GNU General Public License
-#   along with ewsdocker/httpd:2.4.43-alpine.  If not, see 
+#   along with ewsdocker/httpd:2.4.46-alpine.  If not, see 
 #   <http://www.gnu.org/licenses/>.
 #
 # ========================================================================================
@@ -45,42 +46,44 @@ docker stop httpd
 docker rm httpd
 
 echo
-echo "Removing alpine-apache:2.4.43"
+echo "Removing alpine-apache:2.4.46"
 echo
 
-docker rmi alpine-apache:2.4.43
+docker rmi ewsdocker/alpine-apache:2.4.46
 
 echo
-echo "Building alpine-apache:2.4.43"
+echo "Building alpine-apache:2.4.46"
 echo
 
 docker build \
        --file=Dockerfile \
-       -t alpine-apache:2.4.43 .
+       -t ewsdocker/alpine-apache:2.4.46 .
 [[ $? -eq 0 ]] ||
  {
- 	echo "alpine-apache:2.4.43 failed"
+ 	echo "ewsdocker/alpine-apache:2.4.46 failed"
  	exit 1
  }
 
 echo
-echo "Installing and starting httpd from alpine-apache:2.4.43"
+echo "Installing and starting httpd from ewsdocker/alpine-apache:2.4.46"
 echo
 
 docker run \
     -d \
     -it \
+	--restart unless-stopped \
+    -v ${HOME}/Development:/usr/local/apache2/htdocs/ \
+    -p=80:80 \
     --name httpd \
-    -v ${HOME}/public_html/:/usr/local/apache2/htdocs/ \
-  alpine-apache:2.4.43
+  ewsdocker/alpine-apache:2.4.46
 [[ $? -eq 0 ]] ||
  {
- 	echo "Unable to install/run httpd from alpine-apache:2.4.43"
+ 	echo "Unable to install/run httpd from ewsdocker/alpine-apache:2.4.46"
  	exit 2
  }
  
 echo
-echo "Successfully installed httpd from alpine-apache:2.4.43"
+echo "Successfully installed httpd from ewsdocker/alpine-apache:2.4.46"
 echo
 
 exit 0
